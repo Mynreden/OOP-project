@@ -17,7 +17,7 @@ public class Main {
         Shop magnum = new Shop("m", "s", "m", "u", "7", "3");
 
         System.out.println(magnum.createProduct("ris", "krutoi"));
-        Product ris = new Product("sahar", "kr", magnum);
+        Product ris = new Product("sugar", "kr", magnum);
         System.out.println(magnum);
         GeneralUserInterface m = new Customer("sd", "fds", "sfd", "df", "f", " ds", 10);
         DataBaseInterface db = new PostgresDB();
