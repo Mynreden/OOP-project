@@ -6,13 +6,13 @@ import java.util.ArrayList;
 public class Shop extends GeneralUser {
     private String name;
     private String address;
-    private ArrayList<Product> products;
+    private int id;
 
     public Shop(String username, String password, String name, String address, String number, String email) {
         super(username, password, number, email);
         this.name = name;
         this.address = address;
-        this.products = new ArrayList<>();
+        this.id = -1;
     }
 
     public String getAddress() {
@@ -30,17 +30,16 @@ public class Shop extends GeneralUser {
     public void setAddress(String address) {
         this.address = address;
     }
-
-    public Product createProduct(String name, String description){
-        return new Product(name, description, this);
-    }
-
-    public void addProduct(Product product){
-        this.products.add(product);
-    }
-
     @Override
     public String toString(){
-        return String.format("Shop %s with products %s", this.name, this.products);
+        return String.format("%d. Shop %s with email %s", this.id, this.name, this.getEmail());
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

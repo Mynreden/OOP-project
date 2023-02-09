@@ -4,7 +4,9 @@ package com.company.data;
 import com.company.data.interfaces.DataBaseInterface;
 
 import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class PostgresDB implements DataBaseInterface {
@@ -24,5 +26,4 @@ public class PostgresDB implements DataBaseInterface {
             return null;
         }
     }
-
 }

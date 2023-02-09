@@ -1,1 +1,4 @@
-/src/com/company/static_files/DBpassword.txt
+/src/com/company/static_files/
+/.idea/
+/out/
+/src/Main.java
