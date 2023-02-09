@@ -1,35 +1,39 @@
 package com.company.repositories;
 
 import com.company.data.interfaces.DataBaseInterface;
+import com.company.products.Product;
 import com.company.users.Customer;
+import com.company.users.Shop;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class CustomerRepository extends GeneralRepository {
+public class ProductRepository extends GeneralRepository {
 
-    public CustomerRepository(DataBaseInterface db){
-        super((db));
+    public ProductRepository(DataBaseInterface db){
+        super(db);
     }
 
-    public boolean addElement(Customer customer) {
+    public boolean addElement(Product product) {
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "INSERT INTO customers(username, password, first_name, last_name,  phone_number, email, age) " +
-                    "VALUES (?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO products(name, description, shop_id, cost)" +
+                    "VALUES (?,?,?,?)";
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setString(1, customer.getUsername());
-            st.setString(2, customer.getPassword());
-            st.setString(3, customer.getFirstName());
-            st.setString(4, customer.getLastName());
-            st.setString(5, customer.getNumber());
-            st.setString(6, customer.getEmail());
-            st.setInt(7, customer.getAge());
+            st.setString(1, product.getName());
+            st.setString(2, product.getDescription());
+            st.setInt(3, product.getShopId());
+            st.setInt(4, product.getCost());
 
             st.execute();
-            System.out.printf("Added customer %s to database successfully\n", customer);
+            product.setId(getIdFromDB(product));
+            System.out.printf("Added product %s to database successfully\n", product);
+
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -45,28 +49,26 @@ public class CustomerRepository extends GeneralRepository {
         return false;
     }
 
-    public Customer getElementById(int id) {
+    public Product getElementById(int id) {
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "SELECT username, password, first_name, last_name,  phone_number, email, age FROM customers WHERE customer_id=?";
+            String sql = "SELECT name, description, shop_id, cost FROM products WHERE product_id=?";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setInt(1, id);
 
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                Customer user = new Customer(rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
-                        rs.getString("phone_number"),
-                        rs.getString("email"),
-                        rs.getInt("age")
-                        );
-                user.setId(id);
-                System.out.printf("%s data received from database\n", user);
-                return user;
+                Product product = new Product(
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("shop_id"),
+                        rs.getInt("cost")
+                );
+                product.setId(id);
+                System.out.printf("%s data received from database\n", product);
+                return product;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -79,28 +81,25 @@ public class CustomerRepository extends GeneralRepository {
                 throwables.printStackTrace();
             }
         }
-
         return null;
     }
-    public ArrayList<Customer> getAllElements(){
+    public ArrayList<Product> getAllElements(){
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "SELECT username, password, first_name, last_name,  phone_number, email, age, customer_id FROM customers";
+            String sql = "SELECT name, description, shop_id, cost, product_id FROM products";
             PreparedStatement pr = con.prepareStatement(sql);
             ResultSet rs = pr.executeQuery();
-            ArrayList<Customer> list = new ArrayList<>();
+            ArrayList<Product> list = new ArrayList<>();
             while (rs.next()){
-                Customer a = new Customer(rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
-                        rs.getString("phone_number"),
-                        rs.getString("email"),
-                        rs.getInt("age")
+                Product product = new Product(
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("shop_id"),
+                        rs.getInt("cost")
                 );
-                a.setId(rs.getInt("customer_id"));
-                list.add(a);
+                product.setId(rs.getInt("product_id"));
+                list.add(product);
             }
             return list;
 
@@ -118,20 +117,21 @@ public class CustomerRepository extends GeneralRepository {
         }
         return null;
     }
-
-    public int getIdFromDB(Customer customer){
+    public int getIdFromDB(Product product){
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "SELECT customer_id FROM customers WHERE username=? AND email=? AND first_name=?";
+            String sql = "SELECT product_id FROM products WHERE name=? AND description=? AND shop_id=? AND cost=?";
             PreparedStatement st = con.prepareStatement(sql);
-            st.setString(1, customer.getUsername());
-            st.setString(2, customer.getEmail());
-            st.setString(3, customer.getFirstName());
+            st.setString(1, product.getName());
+            st.setString(2, product.getDescription());
+            st.setInt(3, product.getShopId());
+            st.setInt(4, product.getCost());
+
 
             ResultSet rs = st.executeQuery();
             if (rs.next()){
-                return rs.getInt("customer_id");
+                return rs.getInt("product_id");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();

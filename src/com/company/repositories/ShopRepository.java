@@ -1,35 +1,37 @@
 package com.company.repositories;
 
 import com.company.data.interfaces.DataBaseInterface;
-import com.company.users.Customer;
+
+import com.company.users.Shop;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class CustomerRepository extends GeneralRepository {
+public class ShopRepository extends GeneralRepository{
 
-    public CustomerRepository(DataBaseInterface db){
-        super((db));
+    public ShopRepository(DataBaseInterface db){
+        super(db);
     }
 
-    public boolean addElement(Customer customer) {
+    public boolean addElement(Shop shop) {
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "INSERT INTO customers(username, password, first_name, last_name,  phone_number, email, age) " +
-                    "VALUES (?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO shops(username, password, name, phone_number, address, email)" +
+                    "VALUES (?,?,?,?,?,?)";
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setString(1, customer.getUsername());
-            st.setString(2, customer.getPassword());
-            st.setString(3, customer.getFirstName());
-            st.setString(4, customer.getLastName());
-            st.setString(5, customer.getNumber());
-            st.setString(6, customer.getEmail());
-            st.setInt(7, customer.getAge());
+            st.setString(1, shop.getUsername());
+            st.setString(2, shop.getPassword());
+            st.setString(3, shop.getName());
+            st.setString(4, shop.getNumber());
+            st.setString(5, shop.getAddress());
+            st.setString(6, shop.getEmail());
 
             st.execute();
-            System.out.printf("Added customer %s to database successfully\n", customer);
+            shop.setId(getIdFromDB(shop));
+            System.out.printf("Added shop %s to database successfully\n", shop);
+
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -45,28 +47,26 @@ public class CustomerRepository extends GeneralRepository {
         return false;
     }
 
-    public Customer getElementById(int id) {
+    public Shop getElementById(int id) {
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "SELECT username, password, first_name, last_name,  phone_number, email, age FROM customers WHERE customer_id=?";
+            String sql = "SELECT username, password, name, phone_number, address, email FROM shops WHERE shop_id=?";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setInt(1, id);
 
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                Customer user = new Customer(rs.getString("username"),
+                Shop shop = new Shop(rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
+                        rs.getString("name"),
+                        rs.getString("address"),
                         rs.getString("phone_number"),
-                        rs.getString("email"),
-                        rs.getInt("age")
-                        );
-                user.setId(id);
-                System.out.printf("%s data received from database\n", user);
-                return user;
+                        rs.getString("email"));
+                shop.setId(id);
+                System.out.printf("%s data received from database\n", shop);
+                return shop;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -79,27 +79,24 @@ public class CustomerRepository extends GeneralRepository {
                 throwables.printStackTrace();
             }
         }
-
         return null;
     }
-    public ArrayList<Customer> getAllElements(){
+    public ArrayList<Shop> getAllElements(){
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "SELECT username, password, first_name, last_name,  phone_number, email, age, customer_id FROM customers";
+            String sql = "SELECT username, password, name, phone_number, address, email, shop_id FROM shops";
             PreparedStatement pr = con.prepareStatement(sql);
             ResultSet rs = pr.executeQuery();
-            ArrayList<Customer> list = new ArrayList<>();
+            ArrayList<Shop> list = new ArrayList<>();
             while (rs.next()){
-                Customer a = new Customer(rs.getString("username"),
+                Shop a = new Shop(rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
+                        rs.getString("name"),
+                        rs.getString("address"),
                         rs.getString("phone_number"),
-                        rs.getString("email"),
-                        rs.getInt("age")
-                );
-                a.setId(rs.getInt("customer_id"));
+                        rs.getString("email"));
+                a.setId(rs.getInt("shop_id"));
                 list.add(a);
             }
             return list;
@@ -118,20 +115,18 @@ public class CustomerRepository extends GeneralRepository {
         }
         return null;
     }
-
-    public int getIdFromDB(Customer customer){
+    public int getIdFromDB(Shop shop){
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "SELECT customer_id FROM customers WHERE username=? AND email=? AND first_name=?";
+            String sql = "SELECT shop_id FROM shops WHERE username=? AND email=?";
             PreparedStatement st = con.prepareStatement(sql);
-            st.setString(1, customer.getUsername());
-            st.setString(2, customer.getEmail());
-            st.setString(3, customer.getFirstName());
+            st.setString(1, shop.getUsername());
+            st.setString(2, shop.getEmail());
 
             ResultSet rs = st.executeQuery();
             if (rs.next()){
-                return rs.getInt("customer_id");
+                return rs.getInt("shop_id");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -146,5 +141,4 @@ public class CustomerRepository extends GeneralRepository {
         }
         return -1;
     }
-
 }
