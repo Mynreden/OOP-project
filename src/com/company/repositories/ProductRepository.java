@@ -2,8 +2,6 @@ package com.company.repositories;
 
 import com.company.data.interfaces.DataBaseInterface;
 import com.company.products.Product;
-import com.company.users.Customer;
-import com.company.users.Shop;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +30,6 @@ public class ProductRepository extends GeneralRepository {
 
             st.execute();
             product.setId(getIdFromDB(product));
-            System.out.printf("Added product %s to database successfully\n", product);
 
             return true;
         } catch (SQLException throwables) {
@@ -67,7 +64,6 @@ public class ProductRepository extends GeneralRepository {
                         rs.getInt("cost")
                 );
                 product.setId(id);
-                System.out.printf("%s data received from database\n", product);
                 return product;
             }
         } catch (SQLException throwables) {

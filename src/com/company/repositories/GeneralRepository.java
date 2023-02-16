@@ -1,6 +1,5 @@
 package com.company.repositories;
 
-import com.company.data.PostgresDB;
 import com.company.data.interfaces.DataBaseInterface;
 
 public abstract class GeneralRepository {
