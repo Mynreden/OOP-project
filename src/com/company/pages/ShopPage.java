@@ -1,7 +1,7 @@
 package com.company.pages;
 
 import com.company.data.interfaces.DataBaseInterface;
-import com.company.products.Product;
+import com.company.items.Product;
 import com.company.repositories.ProductRepository;
 import com.company.users.Customer;
 import com.company.users.Shop;

@@ -1,7 +1,7 @@
 package com.company.repositories;
 
 import com.company.data.interfaces.DataBaseInterface;
-import com.company.products.Product;
+import com.company.items.Product;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
