@@ -1,22 +1,24 @@
 package com.company.items;
 
+import com.company.users.Customer;
+
 public class BucketItem{
-    private int customer_id;
-    private int product_id;
+    private Customer customer;
+    private Product product;
     private int amount;
 
-    public BucketItem(int customer_id, int product_id, int amount){
-        this.customer_id = customer_id;
-        this.product_id = product_id;
+    public BucketItem(Customer customer, Product product, int amount){
+        this.customer = customer;
+        this.product = product;
         this.amount = amount;
     }
 
-    public int getCustomerId() {
-        return this.customer_id;
+    public Customer getCustomer() {
+        return this.customer;
     }
 
-    public int getProductId() {
-        return this.product_id;
+    public Product getProduct() {
+        return this.product;
     }
 
     public int getAmount() {
@@ -25,5 +27,10 @@ public class BucketItem{
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Product %s - %s with cost %d and amount of %d pcs.", this.product.getName(), this.product.getDescription(), this.product.getCost(), this.amount);
     }
 }

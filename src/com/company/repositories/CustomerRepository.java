@@ -80,6 +80,8 @@ public class CustomerRepository extends GeneralRepository {
 
         return null;
     }
+
+    
     public ArrayList<Customer> getAllElements(){
         Connection con = null;
         try {
