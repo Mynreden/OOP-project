@@ -21,17 +21,85 @@ public class BucketRepository extends GeneralRepository {
         customerDB = new CustomerRepository(db);
     }
 
-    public boolean addItem(BucketItem item) {
+    public BucketItem getItem(BucketItem item) {
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "INSERT INTO customer_product(customer_id, product_id, amount) " +
-                    "VALUES (?,?,?)";
+            String sql = "SELECT * FROM customer_product WHERE customer_id = ? AND product_id = ?";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setInt(1, item.getCustomer().getId());
             st.setInt(2, item.getProduct().getId());
-            st.setInt(7, item.getAmount());
+
+            ResultSet rs = st.executeQuery();
+
+            item = new BucketItem(
+                    customerDB.getElementById(rs.getInt("customer_id")),
+                    productDB.getElementById(rs.getInt("product_id")),
+                    rs.getInt("amount")
+            );
+            return item;
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public boolean addItem(BucketItem item) {
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            String sql;
+            BucketItem olditem = getItem(item);
+            if(olditem != null) {
+                sql = "UPDATE customer_product WHERE customer_id = ? AND product_id = ? SET amount = ?";
+                item.setAmount(item.getAmount() + olditem.getAmount());
+            }
+            else {
+                sql = "INSERT INTO customer_product(customer_id, product_id, amount) " +
+                    "VALUES (?,?,?)";
+            }
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setInt(1, item.getCustomer().getId());
+            st.setInt(2, item.getProduct().getId());
+            st.setInt(3, item.getAmount());
+        
+
+            st.execute();
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public boolean removeItem(BucketItem item) {
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            String sql = "DELETE FROM customer_product WHERE customer_id = ? AND product_id = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setInt(1, item.getCustomer().getId());
+            st.setInt(2, item.getProduct().getId());
 
             st.execute();
             return true;
@@ -84,7 +152,9 @@ public class BucketRepository extends GeneralRepository {
         return null;
     }
 
-    
+
+
+
 
     
 
