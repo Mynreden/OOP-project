@@ -17,7 +17,7 @@ public class PostgresDB implements DataBaseInterface {
             // Here we load the driver’s class file into memory at the runtime
             Class.forName("org.postgresql.Driver");
             // Establish the connection
-            Connection con = DriverManager.getConnection(connectionUrl, "postgres", "postgres");
+            Connection con = DriverManager.getConnection(connectionUrl, "postgres", "sultan2004");
 
             return con;
         } catch (Exception e) {

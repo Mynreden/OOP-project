@@ -31,7 +31,7 @@ public class BucketRepository extends GeneralRepository {
 
             st.setInt(1, item.getCustomer().getId());
             st.setInt(2, item.getProduct().getId());
-            st.setInt(7, item.getAmount());
+            st.setInt(3, item.getAmount());
 
             st.execute();
             return true;
