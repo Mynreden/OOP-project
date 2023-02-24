@@ -2,6 +2,7 @@
   <library name="postgresql_driver">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../postgresql_driver.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../json-simple-1.1.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

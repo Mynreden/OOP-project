@@ -2,6 +2,8 @@ package com.company.identification;
 
 import com.company.identification.interfaces.Login;
 import com.company.identification.interfaces.Registration;
+import com.company.input.JSONController;
+import com.company.input.MyScanner;
 import com.company.repositories.CustomerRepository;
 import com.company.users.Customer;
 
@@ -15,22 +17,26 @@ public class CustomerIdentification implements Login, Registration {
     }
 
     public Customer identification() {
-        Scanner in = new Scanner(System.in);
+        MyScanner in = new MyScanner(System.in);
         System.out.println("1. Create account\n2. Sign in");
         int choice = in.nextInt();
-
+        Customer customer;
         if (choice == 1) {
-            return registration();
-        } else if (choice == 2) return login();
+            customer = registration();
+        } else if (choice == 2) customer = login();
         else {
             System.out.println("Incorrect input");
             return identification();
         }
+        JSONController json = new JSONController();
+        try {json.addUser(customer);}
+        catch (java.io.IOException e){ System.out.println(e);};
+        return customer;
 
     }
 
     private Customer registration() {
-        Scanner scan = new Scanner(System.in);
+        MyScanner scan = new MyScanner(System.in);
 
         System.out.println("Enter your name:");
         String name = scan.nextLine();
@@ -53,11 +59,12 @@ public class CustomerIdentification implements Login, Registration {
         String username = scan.next();
         Customer customer = new Customer(username, password1, name, lastName, number, email, age);
         customerDB.addElement(customer);
+        customer.setId(customerDB.getIdFromDB(customer));
         return customer;
     }
 
     private Customer login() {
-        Scanner scan = new Scanner(System.in);
+        MyScanner scan = new MyScanner(System.in);
         System.out.println("Enter your username:");
         String username = scan.next();
         System.out.println("Enter a password:");

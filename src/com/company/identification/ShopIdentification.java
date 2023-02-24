@@ -2,6 +2,8 @@ package com.company.identification;
 
 import com.company.identification.interfaces.Login;
 import com.company.identification.interfaces.Registration;
+import com.company.input.JSONController;
+import com.company.input.MyScanner;
 import com.company.repositories.ShopRepository;
 import com.company.users.Shop;
 
@@ -15,23 +17,27 @@ public class ShopIdentification implements Login, Registration{
     }
 
     public Shop identification(){
-        Scanner in = new Scanner(System.in);
+        MyScanner in = new MyScanner(System.in);
         System.out.println("1. Create account\n2. Sign in");
         int choice = in.nextInt();
-
+        Shop shop;
         if (choice == 1){
-            return registration();
+            shop = registration();
         }
-        else if (choice == 2) return login();
+        else if (choice == 2) shop = login();
         else {
             System.out.println("Incorrect input");
             return identification();
         }
+        JSONController json = new JSONController();
+        try {json.addUser(shop);}
+        catch (java.io.IOException e){ System.out.println(e);};
+        return shop;
 
     }
 
     private Shop registration(){
-        Scanner scan = new Scanner(System.in);
+        MyScanner scan = new MyScanner(System.in);
 
         System.out.println("Enter the name of your store:");
         String name = scan.nextLine();
@@ -55,7 +61,7 @@ public class ShopIdentification implements Login, Registration{
     }
 
     private Shop login(){
-        Scanner scan = new Scanner(System.in);
+        MyScanner scan = new MyScanner(System.in);
         System.out.println("Enter your username:");
         String username = scan.next();
         System.out.println("Enter a password:");

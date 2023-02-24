@@ -2,6 +2,7 @@ package com.company.repositories;
 
 import com.company.data.interfaces.DataBaseInterface;
 
+import com.company.items.Product;
 import com.company.users.Shop;
 
 import java.sql.*;
@@ -188,6 +189,41 @@ public class ShopRepository extends GeneralRepository{
                 return shop;
             }
         } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Product> getShopProducts(Shop shop){
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            String sql = "SELECT name, description, shop_id, cost, product_id FROM products WHERE shop_id=?";
+            PreparedStatement pr = con.prepareStatement(sql);
+            pr.setInt(1, shop.getId());
+            ResultSet rs = pr.executeQuery();
+            ArrayList<Product> list = new ArrayList<>();
+            while (rs.next()){
+                Product product = new Product(
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("shop_id"),
+                        rs.getInt("cost")
+                );
+                product.setId(rs.getInt("product_id"));
+                list.add(product);
+            }
+            return list;
+        }
+        catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

@@ -3,8 +3,6 @@ package com.company.repositories;
 import com.company.data.interfaces.DataBaseInterface;
 import com.company.items.Bucket;
 import com.company.items.BucketItem;
-import com.company.repositories.ProductRepository;
-import com.company.repositories.CustomerRepository;
 import com.company.users.Customer;
 
 import java.sql.*;
@@ -59,22 +57,13 @@ public class BucketRepository extends GeneralRepository {
         try {
             con = db.getConnection();
             String sql;
-            BucketItem olditem = getItem(item);
-            if(olditem != null) {
-                sql = "UPDATE customer_product WHERE customer_id = ? AND product_id = ? SET amount = ?";
-                item.setAmount(item.getAmount() + olditem.getAmount());
-            }
-            else {
-                sql = "INSERT INTO customer_product(customer_id, product_id, amount) " +
+            sql = "INSERT INTO customer_product(customer_id, product_id, amount) " +
                     "VALUES (?,?,?)";
-            }
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setInt(1, item.getCustomer().getId());
             st.setInt(2, item.getProduct().getId());
             st.setInt(3, item.getAmount());
-        
-
             st.execute();
             return true;
         } catch (SQLException throwables) {
@@ -148,14 +137,31 @@ public class BucketRepository extends GeneralRepository {
                 throwables.printStackTrace();
             }
         }
-
         return null;
     }
 
-
-
-
-
-    
-
+    public boolean isItemInBucket(BucketItem item, Customer customer){
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            ArrayList<BucketItem> list = this.getBucketByCustomer(customer).getItems();
+            for (BucketItem i:list){
+                if (i.getProduct().getId() == item.getProduct().getId()){
+                    return true;
+                }
+            }
+            return false;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return false;
+    }
 }
