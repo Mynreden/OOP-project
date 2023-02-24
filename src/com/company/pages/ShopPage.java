@@ -1,7 +1,7 @@
 package com.company.pages;
 
 import com.company.data.interfaces.DataBaseInterface;
-import com.company.products.Product;
+import com.company.items.Product;
 import com.company.repositories.ProductRepository;
 import com.company.users.Customer;
 import com.company.users.Shop;
@@ -21,6 +21,8 @@ public class ShopPage {
     public void render() {
         while (true){
             this.showAllProducts();
+            System.out.print('\n');
+
             Scanner scanner = new Scanner(System.in);
             System.out.println("Do you want add some products?");
             String answer = scanner.nextLine();

@@ -30,17 +30,19 @@ public class CustomerPage {
         System.out.println(customer);
         while(true){
             this.showBucket();
+            addProductToBucket(customer);
         }
     }
 
-    public void showAllProducts(){
+    private void showAllProducts(){
          ArrayList<Product> products = this.productDB.getAllElements();
          for (Product item : products){
              System.out.println(item);
          }
+
     }
 
-    public void showBucket(){
+    private void showBucket(){
         System.out.println("This is your bucket:");
         Bucket bucket = bucketDB.getBucketByCustomer(customer);
         int count = 0;
@@ -48,15 +50,16 @@ public class CustomerPage {
             System.out.println(count + ". " + item);
             count++;
         }
-        showAllProducts();
-        System.out.println("Choose product from list above to add into your bucket:");
+    }
+
+    private void addProductToBucket(Customer customer){
+        System.out.println("\nYou may also add products to your bucket. \nEnter product Id");
         int product_id = scanner.nextInt();
         System.out.println("Enter amount to be added:");
         int amount = scanner.nextInt();
-        
         Product product = productDB.getElementById(product_id);
         bucketDB.addItem(new BucketItem(customer, product, amount));
-        System.out.println("Product has been successfully added to your bucket.");
+        System.out.println("Product has been successfully added to your bucket. \n");
     }
 
 }

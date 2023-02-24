@@ -25,14 +25,13 @@ public class Main {
         if (choice == 1) {
             ShopIdentification shopId = new ShopIdentification(shopDB);
             shop = shopId.identification();
-            System.out.println(shop);
             typeOfUser = true;
 
         }
         else if (choice  == 2) {
             CustomerIdentification customerId = new CustomerIdentification(customerDB);
             customer = customerId.identification();
-            System.out.println(customer);
+
         }
         if (!typeOfUser){
             CustomerPage page = new CustomerPage(customer, db);
@@ -42,7 +41,5 @@ public class Main {
             ShopPage page = new ShopPage(shop, db);
             page.render();
         }
-
-
     }
 }
