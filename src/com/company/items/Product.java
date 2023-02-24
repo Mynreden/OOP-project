@@ -1,4 +1,4 @@
-package com.company.products;
+package com.company.items;
 
 import com.company.products.interfaces.ProductInterface;
 import com.company.users.Shop;

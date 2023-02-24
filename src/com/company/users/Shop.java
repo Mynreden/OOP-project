@@ -1,6 +1,6 @@
 package com.company.users;
 
-import com.company.products.Product;
+import com.company.items.Product;
 import java.util.ArrayList;
 
 public class Shop extends GeneralUser {
