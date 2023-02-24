@@ -1,4 +1,5 @@
-/src/com/company/static_files/
+/src/com/company/static_files/DBpassword.txt
 /.idea/
 /out/
-/src/Main.java
+/lib/
+/src/com/company/data/PostgreDB.java

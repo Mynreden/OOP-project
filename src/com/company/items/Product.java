@@ -1,9 +1,6 @@
 package com.company.items;
 
-import com.company.products.interfaces.ProductInterface;
-import com.company.users.Shop;
-
-public class Product implements ProductInterface{
+public class Product{
     private int id;
     private String name;
     private String description;
@@ -40,7 +37,7 @@ public class Product implements ProductInterface{
 
     @Override
     public String toString(){
-        return String.format("%d. Product %s - %s", this.id, this.name, this.description);
+        return String.format("%d. Product %s - %s with cost %d", this.id, this.name, this.description, this.cost);
     }
 
     public int getId(){

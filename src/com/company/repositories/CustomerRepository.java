@@ -29,7 +29,6 @@ public class CustomerRepository extends GeneralRepository {
             st.setInt(7, customer.getAge());
 
             st.execute();
-            System.out.printf("Added customer %s to database successfully\n", customer);
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -65,7 +64,6 @@ public class CustomerRepository extends GeneralRepository {
                         rs.getInt("age")
                         );
                 user.setId(id);
-                System.out.printf("%s data received from database\n", user);
                 return user;
             }
         } catch (SQLException throwables) {
@@ -82,6 +80,8 @@ public class CustomerRepository extends GeneralRepository {
 
         return null;
     }
+
+    
     public ArrayList<Customer> getAllElements(){
         Connection con = null;
         try {
@@ -145,6 +145,68 @@ public class CustomerRepository extends GeneralRepository {
             }
         }
         return -1;
+    }
+
+    public boolean isAccountExist(String username, String password){
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            String sql = "SELECT password FROM customers WHERE username=?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, username);
+
+            ResultSet rs = st.executeQuery();
+            if (rs.next()){
+                return password.equals(rs.getString("password"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public Customer login(String username, String password){
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            String sql = "SELECT customer_id, first_name, last_name,  phone_number, email, age FROM customers WHERE username=? AND password=?";
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setString(1, username);
+            st.setString(2, password);
+
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Customer user = new Customer(username, password,
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("phone_number"),
+                        rs.getString("email"),
+                        rs.getInt("age")
+                );
+                user.setId(rs.getInt("customer_id"));
+                return user;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return  null;
     }
 
 }

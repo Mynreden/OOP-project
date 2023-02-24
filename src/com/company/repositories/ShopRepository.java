@@ -30,7 +30,6 @@ public class ShopRepository extends GeneralRepository{
 
             st.execute();
             shop.setId(getIdFromDB(shop));
-            System.out.printf("Added shop %s to database successfully\n", shop);
 
             return true;
         } catch (SQLException throwables) {
@@ -65,7 +64,6 @@ public class ShopRepository extends GeneralRepository{
                         rs.getString("phone_number"),
                         rs.getString("email"));
                 shop.setId(id);
-                System.out.printf("%s data received from database\n", shop);
                 return shop;
             }
         } catch (SQLException throwables) {
@@ -140,5 +138,66 @@ public class ShopRepository extends GeneralRepository{
             }
         }
         return -1;
+    }
+
+    public boolean isAccountExist(String username, String password){
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            String sql = "SELECT password FROM shops WHERE username=?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, username);
+
+            ResultSet rs = st.executeQuery();
+            if (rs.next()){
+                return password.equals(rs.getString("password"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public Shop login(String username, String password){
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            String sql = "SELECT  shop_id, name, phone_number, address, email FROM shops WHERE password=? AND username=?";
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setString(1, password);
+            st.setString(2, username);
+
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Shop shop = new Shop(username,
+                        password,
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("phone_number"),
+                        rs.getString("email"));
+                shop.setId(rs.getInt("shop_id"));
+                return shop;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return null;
     }
 }
