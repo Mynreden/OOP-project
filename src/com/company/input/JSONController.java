@@ -59,7 +59,6 @@ public class JSONController {
     }
     private String getTime(){
         LocalDateTime myDateObj = LocalDateTime.now();
-        System.out.println("Before formatting: " + myDateObj);
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
         String formattedDate = myDateObj.format(myFormatObj);

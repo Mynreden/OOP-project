@@ -1,6 +1,7 @@
 package com.company.pages;
 
 import com.company.data.interfaces.DataBaseInterface;
+import com.company.filters.Filter;
 import com.company.input.MyScanner;
 import com.company.items.BucketItem;
 import com.company.items.Product;
@@ -17,7 +18,10 @@ import java.util.ArrayList;
 public class CustomerPage {
     private final Customer customer;
     private final ProductRepository productDB;
+
     private final BucketRepository bucketDB;
+    private final Filter filter;
+
     private final MyScanner scanner;
 
     public CustomerPage(Customer customer, DataBaseInterface db){
@@ -25,6 +29,7 @@ public class CustomerPage {
         this.productDB = new ProductRepository(db);
         this.bucketDB = new BucketRepository(db);
         this.scanner = new MyScanner(System.in);
+        this.filter = new Filter(db);
     }
 
     public void render(){
@@ -32,6 +37,10 @@ public class CustomerPage {
         while(true){
             showBucket();
             showAllProducts();
+            System.out.println("Do you want to use search filters?");
+            if (scanner.next().toLowerCase().equals("yes")) {
+                filterByPrice();
+            }
             addProductToBucket(customer);
         }
     }
@@ -66,14 +75,26 @@ public class CustomerPage {
         System.out.println("Enter amount to be added:");
         int amount = scanner.nextInt();
         BucketItem item = new BucketItem(customer, productDB.getElementById(product_id), amount);
-        System.out.println("jklhlkj");
         if (bucketDB.isItemInBucket(item, this.customer)){
             System.out.println("Product is already in you bucket\n");
         }
         else {
-            System.out.println("khkh");
             bucketDB.addItem(item);
             System.out.println("Product has been successfully added to your bucket. \n");
         }
+    }
+
+    private void filterByPrice(){
+        MyScanner scanner = new MyScanner(System.in);
+        System.out.print("Enter minimum price: ");
+        double minPrice = scanner.nextDouble();
+        System.out.print("Enter maximum price: ");
+        double maxPrice = scanner.nextDouble();
+        ArrayList<Product> list = filter.filterByPrice(minPrice, maxPrice);
+        System.out.println("Products according to the filter:");
+        for (Product i: list){
+            System.out.println(i);
+        }
+        System.out.println();
     }
 }

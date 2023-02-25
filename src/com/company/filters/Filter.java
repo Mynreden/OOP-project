@@ -1,35 +1,53 @@
 package com.company.filters;
+import com.company.items.Product;
 import com.company.repositories.GeneralRepository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import com.company.data.PostgresDB;
 import com.company.data.interfaces.DataBaseInterface;
+import com.company.repositories.ProductRepository;
+
+import javax.xml.crypto.Data;
 
 public class Filter {
+    private final DataBaseInterface db;
+    private final ProductRepository productDB;
+    public Filter(DataBaseInterface db){
+        this.db = db;
+        this.productDB = new ProductRepository(db);
+    }
 
-    public static void filterByPrice(){
-        try(Connection con = DriverManager.getConnection( "jdbc:postgresql://localhost:5432/postgres", "postgres", "161291_Era")) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter minimum price: ");
-        double minPrice = scanner.nextDouble();
-        System.out.print("Enter maximum price: ");
-        double maxPrice = scanner.nextDouble();
+    public ArrayList<Product> filterByPrice(double minPrice, double maxPrice){
+        Connection con = null;
+        try{
+            con = db.getConnection();
 
-        // create SQL statement with parameters
-        String sql = "SELECT * FROM products WHERE cost BETWEEN ? AND ?";
-        PreparedStatement pstmt = con.prepareStatement(sql);
-        pstmt.setDouble(1, minPrice);
-        pstmt.setDouble(2, maxPrice);
+            // create SQL statement with parameters
+            String sql = "SELECT * FROM products WHERE cost BETWEEN ? AND ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setDouble(1, minPrice);
+            pstmt.setDouble(2, maxPrice);
 
-        // execute query and process results
-        ResultSet rs = pstmt.executeQuery();
-        while (rs.next()) {
-            System.out.println(rs.getInt("product_id") + " .Product " + rs.getString("name") + " _ " + rs.getString("description") + "with cost " + rs.getDouble("cost"));
-        }
+            // execute query and process results
+            ResultSet rs = pstmt.executeQuery();
+            ArrayList<Product> products = new ArrayList<>();
+            while (rs.next()) {
+                Product product = new Product(
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("shop_id"),
+                        rs.getInt("cost")
+                );
+                product.setId(rs.getInt("product_id"));
+                products.add(product);
+            }
+            return products;
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
+            return null;
         }
     }
     public static void filterByСategory(){

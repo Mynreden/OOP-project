@@ -44,4 +44,19 @@ public class MyScanner {
         }
     }
 
+    public double nextDouble(){
+        try {
+            String a = scanner.next();
+            if (a.equals("help")) {
+                com.help();
+                a = scanner.next();
+            }
+            return Double.parseDouble(a);
+        }
+        catch (java.lang.NumberFormatException e){
+            System.out.println("Write numbers, not string");
+            return nextDouble();
+        }
+    }
+
 }
