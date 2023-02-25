@@ -5,7 +5,10 @@ import com.company.items.Bucket;
 import com.company.items.BucketItem;
 import com.company.users.Customer;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class BucketRepository extends GeneralRepository {
@@ -13,7 +16,7 @@ public class BucketRepository extends GeneralRepository {
     private ProductRepository productDB;
     private CustomerRepository customerDB;
 
-    public BucketRepository(DataBaseInterface db){
+    public BucketRepository(DataBaseInterface db) {
         super((db));
         productDB = new ProductRepository(db);
         customerDB = new CustomerRepository(db);
@@ -117,7 +120,7 @@ public class BucketRepository extends GeneralRepository {
 
             ResultSet rs = st.executeQuery();
             Bucket bucket = new Bucket(customer.getId());
-            while (rs.next()){
+            while (rs.next()) {
                 BucketItem item = new BucketItem(
                         customerDB.getElementById(rs.getInt("customer_id")),
                         productDB.getElementById(rs.getInt("product_id")),
@@ -140,13 +143,13 @@ public class BucketRepository extends GeneralRepository {
         return null;
     }
 
-    public boolean isItemInBucket(BucketItem item, Customer customer){
+    public boolean isItemInBucket(BucketItem item, Customer customer) {
         Connection con = null;
         try {
             con = db.getConnection();
             ArrayList<BucketItem> list = this.getBucketByCustomer(customer).getItems();
-            for (BucketItem i:list){
-                if (i.getProduct().getId() == item.getProduct().getId()){
+            for (BucketItem i : list) {
+                if (i.getProduct().getId() == item.getProduct().getId()) {
                     return true;
                 }
             }

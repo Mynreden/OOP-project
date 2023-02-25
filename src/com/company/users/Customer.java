@@ -6,14 +6,15 @@ public class Customer extends GeneralUser {
     private int age;
     private int id;
 
-    public Customer(String username, String password, String firstName, String lastName, String number, String email, int age){
+    public Customer(String username, String password, String firstName, String lastName, String number, String email, int age) {
         super(username, password, number, email);
         this.age = age;
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = -1;
     }
-    public Customer(String username, String password){
+
+    public Customer(String username, String password) {
         super(username, password, "", "");
         this.age = 0;
         this.firstName = "";
@@ -46,11 +47,11 @@ public class Customer extends GeneralUser {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("%d. Customer %s with email %s", this.id, this.firstName, this.getEmail());
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 

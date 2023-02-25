@@ -1,8 +1,5 @@
 package com.company.users;
 
-import com.company.items.Product;
-import java.util.ArrayList;
-
 public class Shop extends GeneralUser {
     private String name;
     private String address;
@@ -30,8 +27,9 @@ public class Shop extends GeneralUser {
     public void setAddress(String address) {
         this.address = address;
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("%d. Shop %s with email %s", this.id, this.name, this.getEmail());
     }
 

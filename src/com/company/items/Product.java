@@ -1,13 +1,13 @@
 package com.company.items;
 
-public class Product{
+public class Product {
     private int id;
     private String name;
     private String description;
     private int shopId;
     private int cost;
 
-    public Product(String name, String description, int shop_id, int cost){
+    public Product(String name, String description, int shop_id, int cost) {
         this.id = -1;
         this.description = description;
         this.name = name;
@@ -31,18 +31,19 @@ public class Product{
         this.description = description;
     }
 
-    public int getShopId(){
+    public int getShopId() {
         return shopId;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("%d. Product %s - %s with cost %d", this.id, this.name, this.description, this.cost);
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }

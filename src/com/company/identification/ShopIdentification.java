@@ -7,36 +7,37 @@ import com.company.input.MyScanner;
 import com.company.repositories.ShopRepository;
 import com.company.users.Shop;
 
-import java.util.Scanner;
-
-public class ShopIdentification implements Login, Registration{
+public class ShopIdentification implements Login, Registration {
     private ShopRepository shopDB;
 
-    public ShopIdentification(ShopRepository shopDB){
+    public ShopIdentification(ShopRepository shopDB) {
         this.shopDB = shopDB;
     }
 
-    public Shop identification(){
+    public Shop identification() {
         MyScanner in = new MyScanner(System.in);
         System.out.println("1. Create account\n2. Sign in");
         int choice = in.nextInt();
         Shop shop;
-        if (choice == 1){
+        if (choice == 1) {
             shop = registration();
-        }
-        else if (choice == 2) shop = login();
+        } else if (choice == 2) shop = login();
         else {
             System.out.println("Incorrect input");
             return identification();
         }
         JSONController json = new JSONController();
-        try {json.addUser(shop);}
-        catch (java.io.IOException e){ System.out.println(e);};
+        try {
+            json.addUser(shop);
+        } catch (java.io.IOException e) {
+            System.out.println(e);
+        }
+        ;
         return shop;
 
     }
 
-    private Shop registration(){
+    private Shop registration() {
         MyScanner scan = new MyScanner(System.in);
 
         System.out.println("Enter the name of your store:");
@@ -60,14 +61,14 @@ public class ShopIdentification implements Login, Registration{
         return shop;
     }
 
-    private Shop login(){
+    private Shop login() {
         MyScanner scan = new MyScanner(System.in);
         System.out.println("Enter your username:");
         String username = scan.next();
         System.out.println("Enter a password:");
         String password = scan.next();
         boolean isCorrect = shopDB.isAccountExist(username, password);
-        if (!isCorrect){
+        if (!isCorrect) {
             System.out.println("Try again. Password or Username is incorrect");
             return login();
         }

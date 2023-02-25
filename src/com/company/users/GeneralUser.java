@@ -1,13 +1,13 @@
 package com.company.users;
 
 
-public abstract class GeneralUser{
+public abstract class GeneralUser {
     private String username;
     private String password;
     private String number;
     private String email;
 
-    public GeneralUser(String username, String password, String number, String email){
+    public GeneralUser(String username, String password, String number, String email) {
         this.username = username;
         this.password = password;
         this.number = number;

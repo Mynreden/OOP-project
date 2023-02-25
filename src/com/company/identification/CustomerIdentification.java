@@ -7,8 +7,6 @@ import com.company.input.MyScanner;
 import com.company.repositories.CustomerRepository;
 import com.company.users.Customer;
 
-import java.util.Scanner;
-
 public class CustomerIdentification implements Login, Registration {
     private CustomerRepository customerDB;
 
@@ -29,8 +27,12 @@ public class CustomerIdentification implements Login, Registration {
             return identification();
         }
         JSONController json = new JSONController();
-        try {json.addUser(customer);}
-        catch (java.io.IOException e){ System.out.println(e);};
+        try {
+            json.addUser(customer);
+        } catch (java.io.IOException e) {
+            System.out.println(e);
+        }
+        ;
         return customer;
 
     }

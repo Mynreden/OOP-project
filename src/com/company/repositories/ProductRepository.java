@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class ProductRepository extends GeneralRepository {
 
-    public ProductRepository(DataBaseInterface db){
+    public ProductRepository(DataBaseInterface db) {
         super(db);
     }
 
@@ -79,7 +79,8 @@ public class ProductRepository extends GeneralRepository {
         }
         return null;
     }
-    public ArrayList<Product> getAllElements(){
+
+    public ArrayList<Product> getAllElements() {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -87,7 +88,7 @@ public class ProductRepository extends GeneralRepository {
             PreparedStatement pr = con.prepareStatement(sql);
             ResultSet rs = pr.executeQuery();
             ArrayList<Product> list = new ArrayList<>();
-            while (rs.next()){
+            while (rs.next()) {
                 Product product = new Product(
                         rs.getString("name"),
                         rs.getString("description"),
@@ -99,8 +100,7 @@ public class ProductRepository extends GeneralRepository {
             }
             return list;
 
-        }
-        catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -113,7 +113,8 @@ public class ProductRepository extends GeneralRepository {
         }
         return null;
     }
-    public int getIdFromDB(Product product){
+
+    public int getIdFromDB(Product product) {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -126,7 +127,7 @@ public class ProductRepository extends GeneralRepository {
 
 
             ResultSet rs = st.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 return rs.getInt("product_id");
             }
         } catch (SQLException throwables) {

@@ -2,14 +2,18 @@ package com.company.start;
 
 import com.company.data.PostgresDB;
 import com.company.data.interfaces.DataBaseInterface;
-import com.company.identification.*;
+import com.company.identification.CustomerIdentification;
+import com.company.identification.ShopIdentification;
 import com.company.input.MyScanner;
-import com.company.pages.*;
-import com.company.repositories.*;
-import com.company.users.*;
+import com.company.pages.CustomerPage;
+import com.company.pages.ShopPage;
+import com.company.repositories.CustomerRepository;
+import com.company.repositories.ShopRepository;
+import com.company.users.Customer;
+import com.company.users.Shop;
 
 public class StartProgram {
-    public static void start(){
+    public static void start() {
         DataBaseInterface db = new PostgresDB();
         ShopRepository shopDB = new ShopRepository(db);
         CustomerRepository customerDB = new CustomerRepository(db);
@@ -18,13 +22,12 @@ public class StartProgram {
         int choice = in.nextInt();
         if (choice == 1) {
             shopProgram(shopDB, db);
-        }
-        else if (choice  == 2) {
+        } else if (choice == 2) {
             customerProgram(customerDB, db);
         }
     }
 
-    private static void shopProgram(ShopRepository shopDB, DataBaseInterface db){
+    private static void shopProgram(ShopRepository shopDB, DataBaseInterface db) {
         ShopIdentification shopId = new ShopIdentification(shopDB); // identification
         Shop shop = shopId.identification();
 
@@ -32,7 +35,7 @@ public class StartProgram {
         page.render();
     }
 
-    private static void customerProgram(CustomerRepository customerDB, DataBaseInterface db){
+    private static void customerProgram(CustomerRepository customerDB, DataBaseInterface db) {
         CustomerIdentification customerId = new CustomerIdentification(customerDB); // identification
         Customer customer = customerId.identification();
 

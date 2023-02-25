@@ -1,16 +1,18 @@
 package com.company.repositories;
 
 import com.company.data.interfaces.DataBaseInterface;
-
 import com.company.items.Product;
 import com.company.users.Shop;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ShopRepository extends GeneralRepository{
+public class ShopRepository extends GeneralRepository {
 
-    public ShopRepository(DataBaseInterface db){
+    public ShopRepository(DataBaseInterface db) {
         super(db);
     }
 
@@ -80,7 +82,8 @@ public class ShopRepository extends GeneralRepository{
         }
         return null;
     }
-    public ArrayList<Shop> getAllElements(){
+
+    public ArrayList<Shop> getAllElements() {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -88,7 +91,7 @@ public class ShopRepository extends GeneralRepository{
             PreparedStatement pr = con.prepareStatement(sql);
             ResultSet rs = pr.executeQuery();
             ArrayList<Shop> list = new ArrayList<>();
-            while (rs.next()){
+            while (rs.next()) {
                 Shop a = new Shop(rs.getString("username"),
                         rs.getString("password"),
                         rs.getString("name"),
@@ -100,8 +103,7 @@ public class ShopRepository extends GeneralRepository{
             }
             return list;
 
-        }
-        catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -114,7 +116,8 @@ public class ShopRepository extends GeneralRepository{
         }
         return null;
     }
-    public int getIdFromDB(Shop shop){
+
+    public int getIdFromDB(Shop shop) {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -124,7 +127,7 @@ public class ShopRepository extends GeneralRepository{
             st.setString(2, shop.getEmail());
 
             ResultSet rs = st.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 return rs.getInt("shop_id");
             }
         } catch (SQLException throwables) {
@@ -141,7 +144,7 @@ public class ShopRepository extends GeneralRepository{
         return -1;
     }
 
-    public boolean isAccountExist(String username, String password){
+    public boolean isAccountExist(String username, String password) {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -150,11 +153,11 @@ public class ShopRepository extends GeneralRepository{
             st.setString(1, username);
 
             ResultSet rs = st.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 return password.equals(rs.getString("password"));
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            return false;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -167,7 +170,7 @@ public class ShopRepository extends GeneralRepository{
         return false;
     }
 
-    public Shop login(String username, String password){
+    public Shop login(String username, String password) {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -202,7 +205,7 @@ public class ShopRepository extends GeneralRepository{
         return null;
     }
 
-    public ArrayList<Product> getShopProducts(Shop shop){
+    public ArrayList<Product> getShopProducts(Shop shop) {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -211,7 +214,7 @@ public class ShopRepository extends GeneralRepository{
             pr.setInt(1, shop.getId());
             ResultSet rs = pr.executeQuery();
             ArrayList<Product> list = new ArrayList<>();
-            while (rs.next()){
+            while (rs.next()) {
                 Product product = new Product(
                         rs.getString("name"),
                         rs.getString("description"),
@@ -222,8 +225,7 @@ public class ShopRepository extends GeneralRepository{
                 list.add(product);
             }
             return list;
-        }
-        catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

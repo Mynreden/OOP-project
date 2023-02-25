@@ -3,12 +3,15 @@ package com.company.repositories;
 import com.company.data.interfaces.DataBaseInterface;
 import com.company.users.Customer;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerRepository extends GeneralRepository {
 
-    public CustomerRepository(DataBaseInterface db){
+    public CustomerRepository(DataBaseInterface db) {
         super((db));
     }
 
@@ -62,7 +65,7 @@ public class CustomerRepository extends GeneralRepository {
                         rs.getString("phone_number"),
                         rs.getString("email"),
                         rs.getInt("age")
-                        );
+                );
                 user.setId(id);
                 return user;
             }
@@ -81,8 +84,8 @@ public class CustomerRepository extends GeneralRepository {
         return null;
     }
 
-    
-    public ArrayList<Customer> getAllElements(){
+
+    public ArrayList<Customer> getAllElements() {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -90,7 +93,7 @@ public class CustomerRepository extends GeneralRepository {
             PreparedStatement pr = con.prepareStatement(sql);
             ResultSet rs = pr.executeQuery();
             ArrayList<Customer> list = new ArrayList<>();
-            while (rs.next()){
+            while (rs.next()) {
                 Customer a = new Customer(rs.getString("username"),
                         rs.getString("password"),
                         rs.getString("first_name"),
@@ -104,8 +107,7 @@ public class CustomerRepository extends GeneralRepository {
             }
             return list;
 
-        }
-        catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -119,7 +121,7 @@ public class CustomerRepository extends GeneralRepository {
         return null;
     }
 
-    public int getIdFromDB(Customer customer){
+    public int getIdFromDB(Customer customer) {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -130,7 +132,7 @@ public class CustomerRepository extends GeneralRepository {
             st.setString(3, customer.getFirstName());
 
             ResultSet rs = st.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 return rs.getInt("customer_id");
             }
         } catch (SQLException throwables) {
@@ -147,7 +149,7 @@ public class CustomerRepository extends GeneralRepository {
         return -1;
     }
 
-    public boolean isAccountExist(String username, String password){
+    public boolean isAccountExist(String username, String password) {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -156,11 +158,11 @@ public class CustomerRepository extends GeneralRepository {
             st.setString(1, username);
 
             ResultSet rs = st.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 return password.equals(rs.getString("password"));
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            return false;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -173,7 +175,7 @@ public class CustomerRepository extends GeneralRepository {
         return false;
     }
 
-    public Customer login(String username, String password){
+    public Customer login(String username, String password) {
         Connection con = null;
         try {
             con = db.getConnection();
@@ -206,7 +208,7 @@ public class CustomerRepository extends GeneralRepository {
                 throwables.printStackTrace();
             }
         }
-        return  null;
+        return null;
     }
 
 }

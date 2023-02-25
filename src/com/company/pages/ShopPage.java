@@ -23,7 +23,7 @@ public class ShopPage {
 
     public void render() {
         System.out.printf("Account: %s\nName: %s\n\n", shop.getUsername(), shop.getName());
-        while (true){
+        while (true) {
             this.showShopProducts();
             addProduct();
         }
@@ -50,7 +50,7 @@ public class ShopPage {
         System.out.println();
     }
 
-    private Product productCreationForm(){
+    private Product productCreationForm() {
         System.out.println("What do you want to add?");
         String name = scanner.nextLine();
 
@@ -65,15 +65,16 @@ public class ShopPage {
         return product;
     }
 
-    private void addProduct(){
+    private void addProduct() {
         System.out.println("Do you want add product?");
         String answer = scanner.nextLine();
-        if (answer.toLowerCase().equals("yes")){
+        if (answer.toLowerCase().equals("yes")) {
             productCreationForm();
             System.out.println("\nProduct successfully added");
         }
     }
-    public String userInfo(){
+
+    public String userInfo() {
         return "";
     }
 }

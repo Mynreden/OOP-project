@@ -2,12 +2,12 @@ package com.company.items;
 
 import com.company.users.Customer;
 
-public class BucketItem{
+public class BucketItem {
     private Customer customer;
     private Product product;
     private int amount;
 
-    public BucketItem(Customer customer, Product product, int amount){
+    public BucketItem(Customer customer, Product product, int amount) {
         this.customer = customer;
         this.product = product;
         this.amount = amount;

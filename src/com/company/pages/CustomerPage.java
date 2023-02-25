@@ -3,16 +3,13 @@ package com.company.pages;
 import com.company.data.interfaces.DataBaseInterface;
 import com.company.filters.Filter;
 import com.company.input.MyScanner;
+import com.company.items.Bucket;
 import com.company.items.BucketItem;
 import com.company.items.Product;
 import com.company.repositories.BucketRepository;
-import com.company.repositories.CustomerRepository;
 import com.company.repositories.ProductRepository;
 import com.company.users.Customer;
-import com.company.items.Bucket;
-import com.company.items.BucketItem;
 
-import java.util.Scanner;
 import java.util.ArrayList;
 
 public class CustomerPage {
@@ -24,7 +21,7 @@ public class CustomerPage {
 
     private final MyScanner scanner;
 
-    public CustomerPage(Customer customer, DataBaseInterface db){
+    public CustomerPage(Customer customer, DataBaseInterface db) {
         this.customer = customer;
         this.productDB = new ProductRepository(db);
         this.bucketDB = new BucketRepository(db);
@@ -32,9 +29,9 @@ public class CustomerPage {
         this.filter = new Filter(db);
     }
 
-    public void render(){
+    public void render() {
         System.out.printf("Account: %s\nName: %s %s\n\n", customer.getUsername(), customer.getFirstName(), customer.getLastName());
-        while(true){
+        while (true) {
             showBucket();
             showAllProducts();
             System.out.println("Do you want to use search filters?");
@@ -45,20 +42,20 @@ public class CustomerPage {
         }
     }
 
-    private void showAllProducts(){
+    private void showAllProducts() {
         System.out.println("Products on marketplace");
         ArrayList<Product> products = this.productDB.getAllElements();
-        for (Product item : products){
+        for (Product item : products) {
             System.out.println(item);
         }
         System.out.println();
     }
 
-    private void showBucket(){
+    private void showBucket() {
         Bucket bucket = bucketDB.getBucketByCustomer(customer);
-        if (bucket.getItems().size() == 0){
+        if (bucket.getItems().size() == 0) {
             System.out.println("Your bucket is empty\n");
-            return ;
+            return;
         }
         System.out.println("This is your bucket:");
         int count = 1;
@@ -69,22 +66,21 @@ public class CustomerPage {
         System.out.println();
     }
 
-    private void addProductToBucket(Customer customer){
+    private void addProductToBucket(Customer customer) {
         System.out.println("You may also add products to your bucket. \nEnter product Id");
         int product_id = scanner.nextInt();
         System.out.println("Enter amount to be added:");
         int amount = scanner.nextInt();
         BucketItem item = new BucketItem(customer, productDB.getElementById(product_id), amount);
-        if (bucketDB.isItemInBucket(item, this.customer)){
+        if (bucketDB.isItemInBucket(item, this.customer)) {
             System.out.println("Product is already in you bucket\n");
-        }
-        else {
+        } else {
             bucketDB.addItem(item);
             System.out.println("Product has been successfully added to your bucket. \n");
         }
     }
 
-    private void filterByPrice(){
+    private void filterByPrice() {
         MyScanner scanner = new MyScanner(System.in);
         System.out.print("Enter minimum price: ");
         double minPrice = scanner.nextDouble();
@@ -92,7 +88,7 @@ public class CustomerPage {
         double maxPrice = scanner.nextDouble();
         ArrayList<Product> list = filter.filterByPrice(minPrice, maxPrice);
         System.out.println("Products according to the filter:");
-        for (Product i: list){
+        for (Product i : list) {
             System.out.println(i);
         }
         System.out.println();
