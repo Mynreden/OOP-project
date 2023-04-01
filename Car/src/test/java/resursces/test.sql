@@ -1,0 +1,1 @@
+insert into car (name, color, ye ar, capacity) values("Audi" , "Red", 1988, 1.8);
